@@ -28,11 +28,11 @@ class AuthController extends Controller
             
             $user = Auth::user();
             
-            if ($user->role === 'admin') {
-                return redirect()->route('admin.dashboard')->with('success', 'Bienvenue admin !');
-            } else {
+            // if ($user->role === 'admin') {
+            //     return redirect()->route('admin.dashboard')->with('success', 'Bienvenue admin !');
+            // } else {
                 return redirect()->route('homePage')->with('success', 'Bienvenue !');
-            }
+//            }
         }
 
         return back()->withErrors([

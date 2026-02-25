@@ -1669,7 +1669,7 @@ img {
                 <div class="nav-links">
                 <div class="nav-search"> 
                     <form action="{{url('my_search')}}" method="GET"> 
-                        <input type="search" name="search" id="searchInput" placeholder="Rechercher un produit..."> 
+                        <input type="search" name="search" id="searchInput" value="{{request('search')}}" placeholder="Rechercher un produit"> 
                         <button type="submit" value="search" id="searchBtn"> 
                             <i class="fas fa-search"></i> 
                         </button> 
@@ -1680,20 +1680,21 @@ img {
     <a href="{{ route('favoris.index') }}" class="nav-link" style="color: #ff6b6b;">
         <i class="fas fa-heart"></i> Mes Favoris
     </a>
+    <a href="{{ route('usersList.index') }}" class="nav-link" style="color: #151517;">
+     Users
+    </a>
+
 @endauth
                     @auth
-                        <span style="color: #2d6a4f; font-weight: 500;">
-                            Bonjour, {{ Auth::user()->firstname }}!
-                        </span>
                         
-                        @if(Auth::user()->role === 'Admin')
+
                             <a href="{{ route('admin.dashboard') }}" class="nav-link">
                                 <i class="fas fa-cogs"></i> Dashboard Admin
                             </a>
                             <a href="{{ route('product.create') }}" class="nav-link">
                                 <i class="fas fa-plus"></i> Ajouter produit
                             </a>
-                        @endif
+
                         
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -1720,9 +1721,6 @@ img {
             <div class="welcome-message">
                 <h2>👋 Bienvenue, {{ Auth::user()->firstname }} !</h2>
                 <p>Nous sommes ravis de vous revoir sur GreenTech Solutions.</p>
-                @if(Auth::user()->role === 'admin')
-                    <p>Vous êtes connecté en tant qu administrateur. Vous pouvez gérer les produits.</p>
-                @endif
             </div>
         </div>
     @endauth
@@ -1744,21 +1742,17 @@ img {
 
         <!-- Bouton pour ajouter un produit (visible seulement pour admin) -->
         @auth
-            @if(Auth::user()->role === 'admin')
                 <div class="add-product-btn">
                     <a href="{{ route('product.create') }}" class="btn-add">
                         <i class="fas fa-plus"></i> Ajouter un nouveau produit
                     </a>
                 </div>
-            @endif
         @endauth
         
     <div id="productsGrid" class="products-grid">
     @foreach ($products as $produit)
     <div class="product-card">
-        <!-- Icônes d'action (visible seulement pour admin) -->
         @auth
-            @if(Auth::user()->role === 'Admin')
                 <div class="product-actions">
                     <a href="{{ route('product.edit', $produit->id) }}" 
                        class="action-btn edit-btn" 
@@ -1776,7 +1770,6 @@ img {
                         </button>
                     </form>
                 </div>
-            @endif
         @endauth
         
 @auth
@@ -1786,6 +1779,14 @@ img {
             $user = App\Models\User::find($user_id);
             
             $isFavorite = $user->favoriteProducts()->where('produit_id', $produit->id)->exists();
+
+            $favorisExist = $produit->isFavoritedBy($user_id);
+
+            var_dump($favorisExist);
+
+
+
+
         @endphp
         
         <form action="{{ route('favoris.toggle', $produit->id) }}" method="POST" style="display: inline;">

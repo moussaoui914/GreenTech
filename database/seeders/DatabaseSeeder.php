@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@greentech.com',
             'phone' => '0600000000',
             'password' => Hash::make('admin123'),
-            'role' => 'admin',
-        ]);
+
+            ]);
 
         User::create([
             'firstname' => 'Client',
@@ -27,7 +27,6 @@ class DatabaseSeeder extends Seeder
             'email' => 'client@test.com',
             'phone' => '0611111111',
             'password' => Hash::make('client123'),
-            'role' => 'client',
         ]);
 
         $categories = ['Panneaux Solaires', 'Éoliennes', 'Systèmes d\'Irrigation'];
